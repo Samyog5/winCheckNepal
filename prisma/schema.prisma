@@ -1,0 +1,59 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Method {
+  MANUAL
+  IMAGE
+}
+
+model Draw {
+  id            String    @id @default(cuid())
+  drawId        String    @unique
+  category      String
+  titleEn       String
+  titleNe       String
+  publishedAt   DateTime
+  claimDeadline DateTime
+  eligibleFrom  DateTime?
+  eligibleTo    DateTime?
+  drawType      String?   @default("MONTHLY")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  winners       Winner[]
+
+  @@index([drawId])
+  @@index([publishedAt])
+}
+
+model Winner {
+  id           String   @id @default(cuid())
+  drawId       String
+  couponNumber String   // MUST always remain string, preserving leading zeros
+  rank         String
+  fiscalYear   String
+  createdAt    DateTime @default(now())
+
+  draw         Draw?    @relation(fields: [drawId], references: [drawId], onDelete: Cascade)
+
+  @@index([couponNumber])
+  @@index([drawId])
+}
+
+model CheckHistory {
+  id           String   @id @default(cuid())
+  couponNumber String
+  method       Method
+  ipAddress    String?
+  checkedAt    DateTime @default(now())
+  winnerFound  Boolean
+
+  @@index([couponNumber])
+  @@index([checkedAt])
+}
