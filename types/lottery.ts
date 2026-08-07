@@ -13,12 +13,21 @@ export interface WinnerRecord {
   createdAt?: string | Date;
 }
 
+export interface SingleCouponCheckItem {
+  couponNumber: string;
+  isWinner: boolean;
+  winnerDetails?: WinnerRecord;
+}
+
 export interface CouponCheckResult {
   couponNumber: string;
   isWinner: boolean;
   winnerDetails?: WinnerRecord;
   checkedAt: string;
   referenceId: string;
+  multiResults?: SingleCouponCheckItem[];
+  totalDetected?: number;
+  winningCount?: number;
 }
 
 export interface CheckHistoryItem {

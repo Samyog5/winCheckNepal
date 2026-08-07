@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShieldCheck, PhoneCall, Mail, Building2, ExternalLink, Lock } from "lucide-react";
+import { ShieldCheck, Mail, ExternalLink, Info } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 
 export function Footer() {
@@ -10,11 +10,11 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 dark:bg-sky-500/10 border border-slate-200 dark:border-sky-500/30">
-                <ShieldCheck className="h-6 w-6 text-red-600 dark:text-sky-400" />
+                <ShieldCheck className="h-6 w-6 text-sky-500 dark:text-sky-400" />
               </div>
               <div>
                 <h3 className="font-extrabold text-base text-slate-900 dark:text-slate-100">
-                  IRD Nepal Lottery
+                  WinCheck Nepal
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                   {siteConfig.nepaliName}
@@ -22,11 +22,11 @@ export function Footer() {
               </div>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-              Official IRD Lottery Portal operated under the auspices of the Inland Revenue Department, Government of Nepal. Promotes tax compliance and rewards tax incentive coupon holders.
+              WinCheck Nepal is a user-friendly independent helper platform built to help Nepalese taxpayers check their coupon numbers against published IRD lottery draw results quickly and easily.
             </p>
-            <div className="flex items-center gap-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-fit">
-              <Lock className="h-3.5 w-3.5" />
-              <span>Official IRD Database Sync</span>
+            <div className="flex items-start gap-2 text-xs text-amber-600 dark:text-amber-400 bg-amber-500/10 p-2.5 rounded-lg border border-amber-500/20">
+              <Info className="h-4 w-4 shrink-0 mt-0.5" />
+              <span>{siteConfig.disclaimer}</span>
             </div>
           </div>
 
@@ -47,7 +47,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="#winners" className="hover:text-sky-500 dark:hover:text-sky-400 transition-colors">
-                  Latest 15 Winners
+                  Latest Published Winners
                 </Link>
               </li>
               <li>
@@ -65,7 +65,7 @@ export function Footer() {
 
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200">
-              Government Portals
+              Official Portals
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
@@ -75,7 +75,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 hover:text-sky-500 dark:hover:text-sky-400 transition-colors"
                 >
-                  <span>IRD Main Portal</span>
+                  <span>IRD Nepal Official Website</span>
                   <ExternalLink className="h-3 w-3 opacity-70" />
                 </a>
               </li>
@@ -86,18 +86,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 hover:text-sky-500 dark:hover:text-sky-400 transition-colors"
                 >
-                  <span>Taxpayer Self-Service</span>
-                  <ExternalLink className="h-3 w-3 opacity-70" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href={siteConfig.links.govNepal}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 hover:text-sky-500 dark:hover:text-sky-400 transition-colors"
-                >
-                  <span>Nepal Government Portal</span>
+                  <span>Official IRD Prize Portal</span>
                   <ExternalLink className="h-3 w-3 opacity-70" />
                 </a>
               </li>
@@ -106,33 +95,26 @@ export function Footer() {
 
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200">
-              IRD Contact Helpline
+              WinCheck Support
             </h4>
             <div className="space-y-2 text-xs text-slate-500 dark:text-slate-400">
               <div className="flex items-center gap-2">
-                <PhoneCall className="h-4 w-4 text-sky-500 shrink-0" />
-                <span>Toll Free Hotline: <strong>{siteConfig.hotline}</strong></span>
-              </div>
-              <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-sky-500 shrink-0" />
-                <span>Email: {siteConfig.supportEmail}</span>
+                <span>Contact: {siteConfig.supportEmail}</span>
               </div>
-              <div className="flex items-start gap-2">
-                <Building2 className="h-4 w-4 text-sky-500 shrink-0 mt-0.5" />
-                <span>Lazimpat, Kathmandu, Nepal</span>
-              </div>
+              <p className="text-[11px] text-slate-400 pt-2">
+                Designed to make IRD taxpayer lottery checking fast, accessible, and hassle-free for everyone.
+              </p>
             </div>
           </div>
         </div>
 
         <div className="mt-10 border-t border-slate-200 dark:border-slate-900 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
-          <p>© {new Date().getFullYear()} Inland Revenue Department (आन्तरिक राजस्व विभाग). All rights reserved.</p>
+          <p>© {new Date().getFullYear()} WinCheck Nepal. Independent taxpayer helper utility.</p>
           <div className="flex items-center gap-4">
             <Link href="#" className="hover:underline">Privacy Policy</Link>
             <span>•</span>
             <Link href="#" className="hover:underline">Terms of Service</Link>
-            <span>•</span>
-            <Link href="#" className="hover:underline">Prize Claim Terms</Link>
           </div>
         </div>
       </div>

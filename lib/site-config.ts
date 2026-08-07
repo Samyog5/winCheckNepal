@@ -6,26 +6,26 @@ export interface NavItem {
 }
 
 export const siteConfig = {
-  name: "IRD Lottery Check Nepal | Check Coupon Online",
-  shortName: "IRD Lottery Nepal",
-  nepaliName: "आन्तरिक राजस्व विभाग - कुपन लटरी जाँच प्रणाली",
+  name: "WinCheck Nepal | Instant IRD Lottery Checker",
+  shortName: "WinCheck Nepal",
+  nepaliName: "WinCheck Nepal - कुपन लटरी जाँच प्रणाली",
   description:
-    "Check your Nepal IRD Lottery coupon online. Upload your coupon screenshot or enter the coupon number to instantly verify whether you have won the latest Nepal Government Taxpayer Incentive Lottery.",
-  url: "https://lottery.ird.gov.np",
-  ogImage: "https://lottery.ird.gov.np/og-image.png",
+    "WinCheck Nepal helps Nepalese taxpayers verify their IRD Lottery coupon numbers online with ease. Upload a payment screenshot or enter your coupon number to instantly check against published IRD winner results.",
+  disclaimer:
+    "WinCheck Nepal is an independent helper tool for checking taxpayer lottery results and is not an official portal of the Inland Revenue Department (IRD) Nepal.",
+  url: "https://winchecknepal.com",
+  ogImage: "https://winchecknepal.com/og-image.png",
   keywords: [
+    "WinCheck Nepal",
     "IRD Lottery Check Nepal",
     "Check Coupon Online",
     "Nepal IRD Lottery Winner List",
-    "Nepal Government Lottery Coupon",
     "Taxpayer Incentive Lottery",
-    "IRD Coupon Winner",
     "आन्तरिक राजस्व विभाग लटरी",
     "नेपाल कुपन लटरी",
   ],
-  author: "Inland Revenue Department (IRD) Nepal",
-  supportEmail: "support@ird.gov.np",
-  hotline: "16600100100",
+  author: "WinCheck Nepal Team",
+  supportEmail: "info@winchecknepal.com",
   mainNav: [
     { title: "Home", href: "/" },
     { title: "Check Coupon", href: "#checker" },
@@ -35,8 +35,7 @@ export const siteConfig = {
   ] as NavItem[],
   links: {
     irdPortal: "https://ird.gov.np",
-    taxPayerPortal: "https://taxpayerportal.ird.gov.np",
-    govNepal: "https://nepal.gov.np",
+    taxPayerPortal: "https://prize.ird.gov.np",
   },
   stats: {
     totalChecked: "1,450,920+",

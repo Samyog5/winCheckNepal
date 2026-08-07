@@ -1,5 +1,6 @@
 export interface OCRResult {
   couponNumber: string | null;
+  couponNumbers?: string[];
   confidence: number;
   processingTime: number;
   provider: string;

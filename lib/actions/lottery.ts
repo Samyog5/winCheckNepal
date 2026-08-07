@@ -2,7 +2,6 @@
 
 import { prisma } from "@/lib/prisma";
 import { CouponCheckResult, WinnerRecord } from "@/types/lottery";
-import { dummyWinnersData } from "@/prisma/seed";
 
 /**
  * Server Action to check a coupon number against official IRD winners
@@ -29,7 +28,7 @@ export async function checkCouponNumberAction(
   let isWinner = false;
 
   try {
-    // 1. Try querying Database for Winner with joined Draw info
+    // Exact string comparison against Winner table in PostgreSQL
     const dbWinner = await prisma.winner
       .findFirst({
         where: { couponNumber },
@@ -59,28 +58,9 @@ export async function checkCouponNumberAction(
         claimDeadlineAD: dbWinner.draw?.claimDeadline || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         createdAt: dbWinner.createdAt,
       };
-    } else {
-      // Fallback check against seed array if DB is offline or not found
-      const fallbackWinner = dummyWinnersData.find(
-        (w) => w.couponNumber === couponNumber
-      );
-      if (fallbackWinner) {
-        isWinner = true;
-        winnerRecord = {
-          id: `seed-${fallbackWinner.couponNumber}`,
-          couponNumber: fallbackWinner.couponNumber,
-          drawDateBS: fallbackWinner.drawDateBS,
-          drawDateAD: fallbackWinner.drawDateAD,
-          drawTitle: fallbackWinner.drawTitle,
-          prizeCategory: fallbackWinner.prizeCategory,
-          prizeAmount: fallbackWinner.prizeAmount,
-          claimDeadlineBS: fallbackWinner.claimDeadlineBS,
-          claimDeadlineAD: fallbackWinner.claimDeadlineAD,
-        };
-      }
     }
 
-    // 2. Record check in CheckHistory
+    // Record check in CheckHistory
     await prisma.checkHistory
       .create({
         data: {
@@ -91,7 +71,7 @@ export async function checkCouponNumberAction(
       })
       .catch(() => null);
   } catch (err) {
-    console.warn("[Check Action] Database connection fallback active:", err);
+    console.warn("[Check Action] Database connection warning:", err);
   }
 
   return {
@@ -140,19 +120,8 @@ export async function getLatestWinnersAction(): Promise<WinnerRecord[]> {
       });
     }
   } catch (err) {
-    console.warn("Database lookup for 15 winners fallback:", err);
+    console.warn("Database lookup for 15 winners warning:", err);
   }
 
-  // Fallback to 15 seeded winners
-  return dummyWinnersData.map((w, idx) => ({
-    id: `winner-${idx + 1}`,
-    couponNumber: w.couponNumber,
-    drawDateBS: w.drawDateBS,
-    drawDateAD: w.drawDateAD,
-    drawTitle: w.drawTitle,
-    prizeCategory: w.prizeCategory,
-    prizeAmount: w.prizeAmount,
-    claimDeadlineBS: w.claimDeadlineBS,
-    claimDeadlineAD: w.claimDeadlineAD,
-  }));
+  return [];
 }

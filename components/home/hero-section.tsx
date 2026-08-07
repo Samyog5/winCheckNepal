@@ -14,19 +14,19 @@ export function HeroSection() {
           {/* Announcement badge */}
           <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-3.5 py-1 text-xs font-semibold text-sky-600 dark:text-sky-300 backdrop-blur-md animate-float">
             <Sparkles className="h-3.5 w-3.5 text-sky-400" />
-            <span>Official IRD Taxpayer Lottery Portal</span>
+            <span>WinCheck Nepal — Instant IRD Lottery Checker</span>
             <span className="h-1 w-1 rounded-full bg-sky-400" />
             <span className="font-mono">FY {siteConfig.stats.activeFiscalYear}</span>
           </div>
 
           {/* Main Hero Heading */}
           <h1 className="max-w-4xl text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-slate-900 dark:text-slate-50 leading-[1.1]">
-            Check <span className="bg-gradient-to-r from-sky-400 via-emerald-400 to-emerald-500 bg-clip-text text-transparent">Nepal IRD Lottery</span> Instantly
+            Check Your <span className="bg-gradient-to-r from-sky-400 via-emerald-400 to-emerald-500 bg-clip-text text-transparent">Nepal IRD Lottery</span> Coupons with Ease
           </h1>
 
           {/* Subtitle */}
           <p className="max-w-2xl text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-            Upload your coupon screenshot or enter your coupon number to instantly verify whether you have won the latest IRD Taxpayer Incentive Lottery.
+            Upload your payment screenshot or enter your coupon number to instantly check against published IRD Taxpayer Incentive Lottery draw results.
           </p>
 
           {/* Action CTAs */}
@@ -50,13 +50,13 @@ export function HeroSection() {
           {/* Trust Highlights */}
           <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs font-semibold text-slate-500 dark:text-slate-400 border-t border-slate-200/60 dark:border-slate-800/60 max-w-2xl">
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-500" /> Official IRD Database Sync
+              <CheckCircle2 className="h-4 w-4 text-emerald-500" /> Independent Helper Utility
             </span>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="h-4 w-4 text-emerald-500" /> Instant Coupon Lookup
             </span>
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-500" /> Image Screenshot Upload
+              <CheckCircle2 className="h-4 w-4 text-emerald-500" /> Multi-Coupon Screenshot OCR
             </span>
           </div>
         </div>

@@ -3,8 +3,8 @@ import sharp from "sharp";
 import { processImageOCR } from "@/lib/services/ocr";
 import { OCRError } from "@/lib/services/ocr/types";
 import { normalizeAndValidateCoupon } from "@/lib/services/coupon-validation";
-import { prisma } from "@/lib/prisma";
-import { dummyWinnersData } from "@/prisma/seed";
+import { prisma, withPrismaRetry } from "@/lib/prisma";
+import { SingleCouponCheckItem, WinnerRecord } from "@/types/lottery";
 
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 const ALLOWED_MIME_TYPES = new Set([
@@ -24,10 +24,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           success: false,
+          provider: null,
+          confidence: null,
+          couponNumbers: [],
+          results: [],
           couponNumber: null,
           winner: false,
           prize: null,
-          confidence: null,
           error: "Invalid content type. Must be multipart/form-data",
         },
         { status: 400 }
@@ -42,10 +45,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           success: false,
+          provider: null,
+          confidence: null,
+          couponNumbers: [],
+          results: [],
           couponNumber: null,
           winner: false,
           prize: null,
-          confidence: null,
           error: "No image file provided in upload request",
         },
         { status: 400 }
@@ -57,10 +63,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           success: false,
+          provider: null,
+          confidence: null,
+          couponNumbers: [],
+          results: [],
           couponNumber: null,
           winner: false,
           prize: null,
-          confidence: null,
           error: "File too large. Maximum file size is 5 MB",
         },
         { status: 400 }
@@ -76,10 +85,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           success: false,
+          provider: null,
+          confidence: null,
+          couponNumbers: [],
+          results: [],
           couponNumber: null,
           winner: false,
           prize: null,
-          confidence: null,
           error: "Unsupported image format. Allowed formats: PNG, JPG, JPEG, WEBP",
         },
         { status: 400 }
@@ -113,10 +125,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           success: false,
+          provider: null,
+          confidence: null,
+          couponNumbers: [],
+          results: [],
           couponNumber: null,
           winner: false,
           prize: null,
-          confidence: null,
           error: "Malformed or corrupted image file",
         },
         { status: 400 }
@@ -127,7 +142,7 @@ export async function POST(req: NextRequest) {
       `[Image Upload] Preprocessed successfully. Size: ${processedBuffer.length} bytes, MIME: ${mimeType}`
     );
 
-    // 7. Execute OCR Service Layer Pipeline
+    // 7. Execute Hybrid OCR Service Layer Pipeline
     let ocrResult;
     try {
       ocrResult = await processImageOCR(processedBuffer);
@@ -136,10 +151,13 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(
           {
             success: false,
+            provider: null,
+            confidence: null,
+            couponNumbers: [],
+            results: [],
             couponNumber: null,
             winner: false,
             prize: null,
-            confidence: null,
             error: ocrError.message,
           },
           { status: ocrError.statusCode }
@@ -148,98 +166,137 @@ export async function POST(req: NextRequest) {
       throw ocrError;
     }
 
-    // 8. Normalize & Validate Extracted Coupon Number
-    const validation = normalizeAndValidateCoupon(ocrResult.couponNumber);
-    if (!validation.isValid || !validation.normalizedCoupon) {
+    // 8. Post Processing: Extract and validate detected coupon numbers
+    const rawCouponsList = ocrResult.couponNumbers && ocrResult.couponNumbers.length > 0
+      ? ocrResult.couponNumbers
+      : ocrResult.couponNumber
+      ? [ocrResult.couponNumber]
+      : [];
+
+    const validCoupons: string[] = [];
+    for (const rawC of rawCouponsList) {
+      const v = normalizeAndValidateCoupon(rawC);
+      if (v.isValid && v.normalizedCoupon && !validCoupons.includes(v.normalizedCoupon)) {
+        validCoupons.push(v.normalizedCoupon);
+      }
+    }
+
+    if (validCoupons.length === 0) {
       return NextResponse.json(
         {
           success: false,
+          provider: ocrResult.provider,
+          confidence: ocrResult.confidence,
+          couponNumbers: [],
+          results: [],
           couponNumber: null,
           winner: false,
           prize: null,
-          confidence: ocrResult.confidence,
-          error: validation.error || "No valid coupon number could be recognized from the image",
+          error: "No valid coupon numbers could be recognized from the image",
         },
         { status: 422 }
       );
     }
 
-    const couponNumber = validation.normalizedCoupon;
+    // 9. Batch Database Verification: Single Prisma query with resilient auto-reconnect
+    const dbWinners = await withPrismaRetry(() =>
+      prisma.winner.findMany({
+        where: {
+          couponNumber: {
+            in: validCoupons,
+          },
+        },
+        include: {
+          draw: true,
+        },
+      })
+    ).catch((err) => {
+      console.warn("[Check-Image API] DB query fallback:", err);
+      return [];
+    });
 
-    // 9. Query Winner Database safely with joined Draw details
-    let winner = false;
-    let prizeDetails: {
-      prizeCategory: string;
-      prizeAmount: number;
-      drawDateBS: string;
-      claimDeadlineBS: string;
-    } | null = null;
+    // Create a Map keyed strictly by exact string couponNumber (preserving leading zeros)
+    const winnerMap = new Map<string, (typeof dbWinners)[0]>();
+    for (const w of dbWinners) {
+      winnerMap.set(w.couponNumber, w);
+    }
 
-    try {
-      const dbWinner = await prisma.winner
-        .findFirst({
-          where: { couponNumber },
-          include: { draw: true },
-        })
-        .catch(() => null);
+    const multiResults: SingleCouponCheckItem[] = [];
+    let winningCount = 0;
+
+    for (const couponNumber of validCoupons) {
+      const dbWinner = winnerMap.get(couponNumber);
+      const isWinner = !!dbWinner;
+
+      let winnerDetails: WinnerRecord | undefined = undefined;
 
       if (dbWinner) {
-        winner = true;
+        winningCount++;
         const category = dbWinner.draw?.category || (dbWinner.rank ? `${dbWinner.rank} Rank Prize` : "Daily Prize");
         const isBumper = category.toLowerCase().includes("bumper");
         const prizeAmount = isBumper ? 1000000 : 133334;
 
-        prizeDetails = {
-          prizeCategory: category,
-          prizeAmount,
+        winnerDetails = {
+          id: dbWinner.id,
+          couponNumber: dbWinner.couponNumber,
           drawDateBS: dbWinner.draw?.publishedAt
             ? dbWinner.draw.publishedAt.toISOString().split("T")[0]
             : "2081-04-15",
+          drawDateAD: dbWinner.draw?.publishedAt || new Date(),
+          drawTitle: dbWinner.draw?.titleEn || "IRD Taxpayer Incentive Draw",
+          prizeCategory: category,
+          prizeAmount,
           claimDeadlineBS: dbWinner.draw?.claimDeadline
             ? dbWinner.draw.claimDeadline.toISOString().split("T")[0]
             : "2081-05-20",
+          claimDeadlineAD: dbWinner.draw?.claimDeadline || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          createdAt: dbWinner.createdAt,
         };
-      } else {
-        const seedMatch = dummyWinnersData.find(
-          (w) => w.couponNumber === couponNumber
-        );
-        if (seedMatch) {
-          winner = true;
-          prizeDetails = {
-            prizeCategory: seedMatch.prizeCategory,
-            prizeAmount: seedMatch.prizeAmount,
-            drawDateBS: seedMatch.drawDateBS,
-            claimDeadlineBS: seedMatch.claimDeadlineBS,
-          };
-        }
       }
 
-      // 10. Log in CheckHistory
-      await prisma.checkHistory
-        .create({
+      // Log check event in CheckHistory safely
+      withPrismaRetry(() =>
+        prisma.checkHistory.create({
           data: {
             couponNumber,
             method: "IMAGE",
-            winnerFound: winner,
+            winnerFound: isWinner,
           },
         })
-        .catch(() => null);
-    } catch (dbError) {
-      console.warn("[Check-Image API] Database log warning:", dbError);
+      ).catch(() => null);
+
+      multiResults.push({
+        couponNumber,
+        isWinner,
+        winnerDetails,
+      });
     }
 
+    const primaryResult = multiResults[0];
     const totalProcessingTime = Date.now() - startTime;
     console.log(
-      `[Check-Image API] Pipeline completed in ${totalProcessingTime}ms. Coupon: ${couponNumber}, Winner: ${winner}`
+      `[Check-Image API] Completed in ${totalProcessingTime}ms. Provider: ${ocrResult.provider}, Checked: ${validCoupons.length}, Winners: ${winningCount}`
     );
 
     return NextResponse.json(
       {
         success: true,
-        couponNumber,
-        winner,
-        prize: prizeDetails,
+        provider: ocrResult.provider,
         confidence: ocrResult.confidence,
+        couponNumbers: validCoupons,
+        results: multiResults,
+        couponNumber: primaryResult.couponNumber,
+        winner: winningCount > 0,
+        prize: primaryResult.winnerDetails
+          ? {
+              prizeCategory: primaryResult.winnerDetails.prizeCategory,
+              prizeAmount: primaryResult.winnerDetails.prizeAmount,
+              drawDateBS: primaryResult.winnerDetails.drawDateBS,
+              claimDeadlineBS: primaryResult.winnerDetails.claimDeadlineBS,
+            }
+          : null,
+        totalDetected: validCoupons.length,
+        winningCount,
         error: null,
       },
       { status: 200 }
@@ -249,10 +306,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         success: false,
+        provider: null,
+        confidence: null,
+        couponNumbers: [],
+        results: [],
         couponNumber: null,
         winner: false,
         prize: null,
-        confidence: null,
         error: "Internal server error during image coupon verification",
       },
       { status: 500 }

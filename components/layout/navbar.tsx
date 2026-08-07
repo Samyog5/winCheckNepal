@@ -12,22 +12,22 @@ export function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 via-crimson-600 to-sky-600 p-0.5 shadow-md shadow-red-500/10 group-hover:scale-105 transition-transform">
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 via-sky-600 to-indigo-600 p-0.5 shadow-md shadow-sky-500/10 group-hover:scale-105 transition-transform">
               <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-slate-950 text-slate-50 font-black">
-                <ShieldCheck className="h-5 w-5 text-sky-400" />
+                <ShieldCheck className="h-5 w-5 text-emerald-400" />
               </div>
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-base tracking-tight text-slate-900 dark:text-slate-50">
-                  IRD Nepal
+                  WinCheck Nepal
                 </span>
-                <span className="hidden sm:inline-block rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                  Official Portal
+                <span className="hidden sm:inline-block rounded-full bg-sky-500/10 px-2 py-0.5 text-[10px] font-bold text-sky-600 dark:text-sky-400 border border-sky-500/20">
+                  Independent Helper
                 </span>
               </div>
               <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium hidden sm:block">
-                Taxpayer Lottery Verification
+                Easy IRD Lottery Checker
               </span>
             </div>
           </Link>
@@ -49,7 +49,7 @@ export function Navbar() {
           <div className="hidden sm:flex items-center gap-2">
             <Badge variant="sky" className="hidden lg:flex items-center gap-1 py-1">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />
-              <span>FY {siteConfig.stats.activeFiscalYear} Draw Active</span>
+              <span>FY {siteConfig.stats.activeFiscalYear} Draw Results</span>
             </Badge>
           </div>
 

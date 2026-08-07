@@ -1,22 +1,32 @@
 import { IOCRProvider, OCRResult, OCRError } from "./types";
+import { HybridOCRProvider } from "./hybrid-provider";
+import { LocalOCRProvider } from "./local-provider";
+import { OpenRouterVisionProvider } from "./openrouter-provider";
 
-/**
- * Default / Unconfigured OCR Provider implementation.
- * Replaceable at runtime or config with OpenRouter, EasyOCR, RapidOCR, Gemini adapters.
- */
 export class DefaultOCRProvider implements IOCRProvider {
-  public name = "default-unconfigured";
+  readonly name: string = "DefaultOCRProvider";
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async processImage(imageBuffer: Buffer): Promise<OCRResult> {
-    throw new OCRError("Provider not configured", 501, "PROVIDER_NOT_CONFIGURED");
+  async processImage(): Promise<OCRResult> {
+    throw new OCRError("Provider not configured", 501);
   }
 }
 
 /**
- * Active OCR Provider instance resolver.
- * Easy drop-in point for future OCR engine providers.
+ * Returns active OCR Provider implementation instance based on OCR_PROVIDER environment configuration
  */
 export function getActiveOCRProvider(): IOCRProvider {
-  return new DefaultOCRProvider();
+  const ocrProviderConfig = (process.env.OCR_PROVIDER || "hybrid").toLowerCase();
+
+  if (ocrProviderConfig === "local" || ocrProviderConfig === "rapidocr") {
+    return new LocalOCRProvider();
+  }
+
+  if (ocrProviderConfig === "openrouter") {
+    return new OpenRouterVisionProvider();
+  }
+
+  // Default: Hybrid Provider (Local Primary -> OpenRouter Fallback)
+  return new HybridOCRProvider();
 }
+
+export { HybridOCRProvider, LocalOCRProvider, OpenRouterVisionProvider };
