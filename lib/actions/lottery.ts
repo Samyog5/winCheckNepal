@@ -1,7 +1,42 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+import { prisma, withPrismaRetry } from "@/lib/prisma";
 import { CouponCheckResult, WinnerRecord } from "@/types/lottery";
+
+export interface RealtimeStats {
+  totalChecked: number;
+  totalWinners: number;
+  totalDraws: number;
+}
+
+/**
+ * Server Action to fetch real-time database metrics for homepage stats
+ */
+export async function getStatsAction(): Promise<RealtimeStats> {
+  try {
+    return await withPrismaRetry(async () => {
+      const [totalChecked, totalWinners, totalDraws] = await Promise.all([
+        prisma.checkHistory.count(),
+        prisma.winner.count(),
+        prisma.draw.count(),
+      ]);
+
+      return {
+        totalChecked,
+        totalWinners,
+        totalDraws,
+      };
+    });
+  } catch (err) {
+    console.warn("[Stats Action] Database connection warning:", err);
+    return {
+      totalChecked: 0,
+      totalWinners: 0,
+      totalDraws: 0,
+    };
+  }
+}
 
 /**
  * Server Action to check a coupon number against official IRD winners
@@ -28,13 +63,12 @@ export async function checkCouponNumberAction(
   let isWinner = false;
 
   try {
-    // Exact string comparison against Winner table in PostgreSQL
-    const dbWinner = await prisma.winner
-      .findFirst({
+    const dbWinner = await withPrismaRetry(() =>
+      prisma.winner.findFirst({
         where: { couponNumber },
         include: { draw: true },
       })
-      .catch(() => null);
+    ).catch(() => null);
 
     if (dbWinner) {
       isWinner = true;
@@ -61,15 +95,17 @@ export async function checkCouponNumberAction(
     }
 
     // Record check in CheckHistory
-    await prisma.checkHistory
-      .create({
+    await withPrismaRetry(() =>
+      prisma.checkHistory.create({
         data: {
           couponNumber,
           method,
           winnerFound: isWinner,
         },
       })
-      .catch(() => null);
+    ).catch(() => null);
+
+    revalidatePath("/");
   } catch (err) {
     console.warn("[Check Action] Database connection warning:", err);
   }
@@ -88,13 +124,13 @@ export async function checkCouponNumberAction(
  */
 export async function getLatestWinnersAction(): Promise<WinnerRecord[]> {
   try {
-    const winners = await prisma.winner
-      .findMany({
+    const winners = await withPrismaRetry(() =>
+      prisma.winner.findMany({
         take: 15,
         orderBy: { createdAt: "desc" },
         include: { draw: true },
       })
-      .catch(() => []);
+    ).catch(() => []);
 
     if (winners && winners.length > 0) {
       return winners.map((w) => {

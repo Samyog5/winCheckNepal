@@ -10,15 +10,13 @@ export const prisma =
     log: ["error"],
   });
 
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
+globalForPrisma.prisma = prisma;
 
 /**
  * Resilient query wrapper that automatically retries database operations if
- * a Neon serverless PgBouncer connection socket was closed due to idle timeout.
+ * a Neon serverless PostgreSQL connection socket was dropped during scale-to-zero.
  */
-export async function withPrismaRetry<T>(fn: () => Promise<T>, retries = 2): Promise<T> {
+export async function withPrismaRetry<T>(fn: () => Promise<T>, retries = 3): Promise<T> {
   try {
     return await fn();
   } catch (error: unknown) {
@@ -27,12 +25,14 @@ export async function withPrismaRetry<T>(fn: () => Promise<T>, retries = 2): Pro
       errMessage.includes("Closed") ||
       errMessage.includes("connection pool") ||
       errMessage.includes("kind: Closed") ||
+      errMessage.includes("Can't reach database server") ||
       (error as { code?: string })?.code === "P1001" ||
       (error as { code?: string })?.code === "P1017";
 
     if (isConnClosed && retries > 0) {
-      console.warn("[Prisma] Idle serverless PostgreSQL connection closed by Neon PgBouncer. Re-establishing connection...");
+      console.warn("[Prisma] Database connection re-establishing after serverless scale-to-zero idle pause...");
       await prisma.$disconnect().catch(() => {});
+      await new Promise((res) => setTimeout(res, 500));
       await prisma.$connect().catch(() => {});
       return withPrismaRetry(fn, retries - 1);
     }
