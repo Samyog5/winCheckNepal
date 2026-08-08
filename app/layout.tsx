@@ -20,11 +20,10 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "IRD Lottery Check Nepal | Check Coupon Online",
-    template: `%s | IRD Lottery Nepal`,
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.shortName}`,
   },
-  description:
-    "Check your Nepal IRD Lottery coupon online. Upload your coupon screenshot or enter the coupon number to instantly verify whether you have won the latest Nepal Government Taxpayer Incentive Lottery.",
+  description: siteConfig.description,
   keywords: siteConfig.keywords,
   authors: [{ name: siteConfig.author }],
   creator: siteConfig.author,
@@ -33,30 +32,30 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  verification: {
+    google: "google7f0bc501e1c739bd",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: siteConfig.url,
-    title: "IRD Lottery Check Nepal | Check Coupon Online",
-    description:
-      "Check your Nepal IRD Lottery coupon online. Upload your coupon screenshot or enter the coupon number to instantly verify whether you have won the latest Nepal Government Taxpayer Incentive Lottery.",
+    title: siteConfig.name,
+    description: siteConfig.description,
     siteName: siteConfig.shortName,
     images: [
       {
         url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: "IRD Lottery Check Nepal",
+        alt: siteConfig.name,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "IRD Lottery Check Nepal | Check Coupon Online",
-    description:
-      "Check your Nepal IRD Lottery coupon online. Upload your coupon screenshot or enter the coupon number to instantly verify whether you have won the latest Nepal Government Taxpayer Incentive Lottery.",
+    title: siteConfig.name,
+    description: siteConfig.description,
     images: [siteConfig.ogImage],
-    creator: "@ird_nepal",
   },
   icons: {
     icon: "/icon.svg",
