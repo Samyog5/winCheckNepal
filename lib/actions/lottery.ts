@@ -121,13 +121,13 @@ export async function checkCouponNumberAction(
 }
 
 /**
- * Fetch latest official IRD winners including Bumper Prize winners prioritized at top
+ * Fetch all latest official IRD winners including Bumper Prize winners prioritized at top
  */
 export async function getLatestWinnersAction(): Promise<WinnerRecord[]> {
   try {
     const winners = await withPrismaRetry(() =>
       prisma.winner.findMany({
-        take: 30,
+        take: 100,
         orderBy: { createdAt: "desc" },
         include: { draw: true },
       })
@@ -161,7 +161,7 @@ export async function getLatestWinnersAction(): Promise<WinnerRecord[]> {
       // Sort bumper prize winners to the top
       mapped.sort((a, b) => (b.isBumper ? 1 : 0) - (a.isBumper ? 1 : 0));
 
-      return mapped.slice(0, 15);
+      return mapped;
     }
   } catch (err) {
     console.warn("Database lookup for latest winners warning:", err);
