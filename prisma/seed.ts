@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 export const dummyWinnersData = [
+  // 1 Bumper Prize Winner
   {
     couponNumber: "007315254493",
     drawDateBS: "2083-04-22",
@@ -11,51 +12,92 @@ export const dummyWinnersData = [
     claimDeadlineBS: "2083-05-07",
     claimDeadlineAD: new Date("2026-08-22"),
   },
+  // 15 Daily Winners from Official IRD API
   {
-    couponNumber: "011380914580",
+    couponNumber: "007755590670",
     drawDateBS: "2083-04-22",
     drawDateAD: new Date("2026-08-07"),
-    drawTitle: "Daily Winner Consumer Selection",
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
     prizeCategory: "Daily Prize",
     prizeAmount: 133334,
     claimDeadlineBS: "2083-05-07",
     claimDeadlineAD: new Date("2026-08-22"),
   },
   {
-    couponNumber: "005588506085",
+    couponNumber: "002928817811",
     drawDateBS: "2083-04-22",
     drawDateAD: new Date("2026-08-07"),
-    drawTitle: "Daily Winner Consumer Selection",
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
     prizeCategory: "Daily Prize",
     prizeAmount: 133334,
     claimDeadlineBS: "2083-05-07",
     claimDeadlineAD: new Date("2026-08-22"),
   },
   {
-    couponNumber: "006841553537",
+    couponNumber: "003066779589",
     drawDateBS: "2083-04-22",
     drawDateAD: new Date("2026-08-07"),
-    drawTitle: "Daily Winner Consumer Selection",
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
     prizeCategory: "Daily Prize",
     prizeAmount: 133334,
     claimDeadlineBS: "2083-05-07",
     claimDeadlineAD: new Date("2026-08-22"),
   },
   {
-    couponNumber: "001808965986",
+    couponNumber: "015611059075",
     drawDateBS: "2083-04-22",
     drawDateAD: new Date("2026-08-07"),
-    drawTitle: "Daily Winner Consumer Selection",
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
     prizeCategory: "Daily Prize",
     prizeAmount: 133334,
     claimDeadlineBS: "2083-05-07",
     claimDeadlineAD: new Date("2026-08-22"),
   },
   {
-    couponNumber: "010837180332",
+    couponNumber: "009917833245",
     drawDateBS: "2083-04-22",
     drawDateAD: new Date("2026-08-07"),
-    drawTitle: "Daily Winner Consumer Selection",
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
+    prizeCategory: "Daily Prize",
+    prizeAmount: 133334,
+    claimDeadlineBS: "2083-05-07",
+    claimDeadlineAD: new Date("2026-08-22"),
+  },
+  {
+    couponNumber: "008782486335",
+    drawDateBS: "2083-04-22",
+    drawDateAD: new Date("2026-08-07"),
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
+    prizeCategory: "Daily Prize",
+    prizeAmount: 133334,
+    claimDeadlineBS: "2083-05-07",
+    claimDeadlineAD: new Date("2026-08-22"),
+  },
+  {
+    couponNumber: "012259086599",
+    drawDateBS: "2083-04-22",
+    drawDateAD: new Date("2026-08-07"),
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
+    prizeCategory: "Daily Prize",
+    prizeAmount: 133334,
+    claimDeadlineBS: "2083-05-07",
+    claimDeadlineAD: new Date("2026-08-22"),
+  },
+  {
+    couponNumber: "004780940884",
+    drawDateBS: "2083-04-22",
+    drawDateAD: new Date("2026-08-07"),
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
+    prizeCategory: "Daily Prize",
+    prizeAmount: 133334,
+    claimDeadlineBS: "2083-05-07",
+    claimDeadlineAD: new Date("2026-08-22"),
+  },
+  {
+    couponNumber: "013035230297",
+    drawDateBS: "2083-04-22",
+    drawDateAD: new Date("2026-08-07"),
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
     prizeCategory: "Daily Prize",
     prizeAmount: 133334,
     claimDeadlineBS: "2083-05-07",
@@ -65,163 +107,128 @@ export const dummyWinnersData = [
     couponNumber: "014973930733",
     drawDateBS: "2083-04-22",
     drawDateAD: new Date("2026-08-07"),
-    drawTitle: "Daily Winner Consumer Selection",
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
     prizeCategory: "Daily Prize",
     prizeAmount: 133334,
     claimDeadlineBS: "2083-05-07",
     claimDeadlineAD: new Date("2026-08-22"),
   },
   {
-    couponNumber: "015585780989",
-    drawDateBS: "2081-04-15",
-    drawDateAD: new Date("2024-07-30"),
-    drawTitle: "IRD Taxpayer Incentive Draw FY 2081/82",
+    couponNumber: "010837180332",
+    drawDateBS: "2083-04-22",
+    drawDateAD: new Date("2026-08-07"),
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
     prizeCategory: "Daily Prize",
     prizeAmount: 133334,
-    claimDeadlineBS: "2081-05-20",
-    claimDeadlineAD: new Date("2024-09-04"),
+    claimDeadlineBS: "2083-05-07",
+    claimDeadlineAD: new Date("2026-08-22"),
   },
   {
-    couponNumber: "014731484426",
-    drawDateBS: "2081-04-15",
-    drawDateAD: new Date("2024-07-30"),
-    drawTitle: "IRD Taxpayer Incentive Draw FY 2081/82",
+    couponNumber: "001808965986",
+    drawDateBS: "2083-04-22",
+    drawDateAD: new Date("2026-08-07"),
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
     prizeCategory: "Daily Prize",
     prizeAmount: 133334,
-    claimDeadlineBS: "2081-05-20",
-    claimDeadlineAD: new Date("2024-09-04"),
+    claimDeadlineBS: "2083-05-07",
+    claimDeadlineAD: new Date("2026-08-22"),
   },
   {
-    couponNumber: "014972520300",
-    drawDateBS: "2081-04-15",
-    drawDateAD: new Date("2024-07-30"),
-    drawTitle: "IRD Taxpayer Incentive Draw FY 2081/82",
+    couponNumber: "006841553537",
+    drawDateBS: "2083-04-22",
+    drawDateAD: new Date("2026-08-07"),
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
     prizeCategory: "Daily Prize",
     prizeAmount: 133334,
-    claimDeadlineBS: "2081-05-20",
-    claimDeadlineAD: new Date("2024-09-04"),
+    claimDeadlineBS: "2083-05-07",
+    claimDeadlineAD: new Date("2026-08-22"),
   },
   {
-    couponNumber: "014709784756",
-    drawDateBS: "2081-04-15",
-    drawDateAD: new Date("2024-07-30"),
-    drawTitle: "IRD Taxpayer Incentive Draw FY 2081/82",
+    couponNumber: "005588506085",
+    drawDateBS: "2083-04-22",
+    drawDateAD: new Date("2026-08-07"),
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
     prizeCategory: "Daily Prize",
     prizeAmount: 133334,
-    claimDeadlineBS: "2081-05-20",
-    claimDeadlineAD: new Date("2024-09-04"),
+    claimDeadlineBS: "2083-05-07",
+    claimDeadlineAD: new Date("2026-08-22"),
   },
   {
-    couponNumber: "014126438219",
-    drawDateBS: "2081-04-15",
-    drawDateAD: new Date("2024-07-30"),
-    drawTitle: "IRD Taxpayer Incentive Draw FY 2081/82",
+    couponNumber: "011380914580",
+    drawDateBS: "2083-04-22",
+    drawDateAD: new Date("2026-08-07"),
+    drawTitle: "Winner Consumer Selection for the period of Shrawan 1 to 15",
     prizeCategory: "Daily Prize",
     prizeAmount: 133334,
-    claimDeadlineBS: "2081-05-20",
-    claimDeadlineAD: new Date("2024-09-04"),
-  },
-  {
-    couponNumber: "013734098146",
-    drawDateBS: "2081-04-15",
-    drawDateAD: new Date("2024-07-30"),
-    drawTitle: "IRD Taxpayer Incentive Draw FY 2081/82",
-    prizeCategory: "Daily Prize",
-    prizeAmount: 133334,
-    claimDeadlineBS: "2081-05-20",
-    claimDeadlineAD: new Date("2024-09-04"),
-  },
-  {
-    couponNumber: "012477218081",
-    drawDateBS: "2081-04-15",
-    drawDateAD: new Date("2024-07-30"),
-    drawTitle: "IRD Taxpayer Incentive Draw FY 2081/82",
-    prizeCategory: "Daily Prize",
-    prizeAmount: 133334,
-    claimDeadlineBS: "2081-05-20",
-    claimDeadlineAD: new Date("2024-09-04"),
-  },
-  {
-    couponNumber: "011484775662",
-    drawDateBS: "2081-04-15",
-    drawDateAD: new Date("2024-07-30"),
-    drawTitle: "IRD Taxpayer Incentive Draw FY 2081/82",
-    prizeCategory: "Daily Prize",
-    prizeAmount: 133334,
-    claimDeadlineBS: "2081-05-20",
-    claimDeadlineAD: new Date("2024-09-04"),
-  },
-  {
-    couponNumber: "011672335571",
-    drawDateBS: "2081-04-15",
-    drawDateAD: new Date("2024-07-30"),
-    drawTitle: "IRD Taxpayer Incentive Draw FY 2081/82",
-    prizeCategory: "Daily Prize",
-    prizeAmount: 133334,
-    claimDeadlineBS: "2081-05-20",
-    claimDeadlineAD: new Date("2024-09-04"),
+    claimDeadlineBS: "2083-05-07",
+    claimDeadlineAD: new Date("2026-08-22"),
   },
 ];
 
 export async function seedDatabase() {
   const prisma = new PrismaClient();
   try {
-    console.log("Seeding IRD Bumper & Daily Winner Records...");
+    console.log("Seeding all 16 IRD Bumper & Daily Winner Records...");
 
     // Create Bumper Draw
     await prisma.draw.upsert({
-      where: { drawId: "draw_bumper_2083" },
+      where: { drawId: "draw_3dcfe8001afc31a805736567ea3ea74f" },
       update: {
         category: "Bumper Prize",
         titleEn: "Bumper Winner Consumer Selection for the period of Shrawan 1 to 15",
-        titleNe: "बम्पर पुरस्कार उपभोक्ता छनोट",
+        titleNe: "श्रावण १ गते देखी १५ गतेसम्मको बम्पर विजेता उपभोक्ता छनौट",
         publishedAt: new Date("2026-08-07T09:27:46.293Z"),
         claimDeadline: new Date("2026-08-22T09:27:46.293Z"),
       },
       create: {
-        drawId: "draw_bumper_2083",
+        drawId: "draw_3dcfe8001afc31a805736567ea3ea74f",
         category: "Bumper Prize",
         titleEn: "Bumper Winner Consumer Selection for the period of Shrawan 1 to 15",
-        titleNe: "बम्पर पुरस्कार उपभोक्ता छनोट",
+        titleNe: "श्रावण १ गते देखी १५ गतेसम्मको बम्पर विजेता उपभोक्ता छनौट",
         publishedAt: new Date("2026-08-07T09:27:46.293Z"),
         claimDeadline: new Date("2026-08-22T09:27:46.293Z"),
       },
     });
 
-    // Create Bumper Winner
-    await prisma.winner.upsert({
-      where: { id: "winner_bumper_007315254493" },
+    // Create Daily Draw
+    await prisma.draw.upsert({
+      where: { drawId: "draw_4b5465a4fb61578d3c6fde09661d9acf" },
       update: {
-        couponNumber: "007315254493",
-        rank: "1",
-        fiscalYear: "2083-84",
-        drawId: "draw_bumper_2083",
+        category: "Daily Prize",
+        titleEn: "Winner Consumer Selection for the period of Shrawan 1 to 15",
+        titleNe: "श्रावण १ गते देखी १५ गतेसम्मको विजेता उपभोक्ता छनौट",
+        publishedAt: new Date("2026-08-07T09:26:52.925Z"),
+        claimDeadline: new Date("2026-08-22T09:26:52.925Z"),
       },
       create: {
-        id: "winner_bumper_007315254493",
-        couponNumber: "007315254493",
-        rank: "1",
-        fiscalYear: "2083-84",
-        drawId: "draw_bumper_2083",
+        drawId: "draw_4b5465a4fb61578d3c6fde09661d9acf",
+        category: "Daily Prize",
+        titleEn: "Winner Consumer Selection for the period of Shrawan 1 to 15",
+        titleNe: "श्रावण १ गते देखी १५ गतेसम्मको विजेता उपभोक्ता छनौट",
+        publishedAt: new Date("2026-08-07T09:26:52.925Z"),
+        claimDeadline: new Date("2026-08-22T09:26:52.925Z"),
       },
     });
 
     for (const winner of dummyWinnersData) {
+      const isBumper = winner.prizeCategory.includes("Bumper");
+      const drawId = isBumper ? "draw_3dcfe8001afc31a805736567ea3ea74f" : "draw_4b5465a4fb61578d3c6fde09661d9acf";
+
       const existing = await prisma.winner.findFirst({
         where: { couponNumber: winner.couponNumber },
       });
       if (!existing) {
         await prisma.winner.create({
           data: {
-            drawId: winner.prizeCategory.includes("Bumper") ? "draw_bumper_2083" : "IRD-2081-04",
+            drawId,
             couponNumber: winner.couponNumber,
-            rank: winner.prizeCategory,
+            rank: isBumper ? "1" : "Daily Prize",
             fiscalYear: "2083-84",
           },
         });
       }
     }
-    console.log("Successfully seeded Bumper and Daily IRD coupon winners.");
+    console.log("Successfully seeded 16 official IRD coupon winners (1 Bumper + 15 Daily).");
   } catch (err) {
     console.warn("Skipped DB seed script execution:", err);
   } finally {

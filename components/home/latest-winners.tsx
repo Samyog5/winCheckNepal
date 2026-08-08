@@ -32,10 +32,10 @@ export function LatestWinnersSection() {
               <span>Official IRD Published Winners</span>
             </div>
             <h2 className="text-3xl font-black text-slate-900 dark:text-slate-50 tracking-tight">
-              Latest Draw Winners (Top 15 Results)
+              Latest Published Winners
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-              Latest published winners from the official Nepal Inland Revenue Department lottery draw.
+              Published winners dynamically synchronized from the official Nepal Inland Revenue Department lottery draws.
             </p>
           </div>
 
