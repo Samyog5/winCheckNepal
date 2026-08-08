@@ -72,8 +72,9 @@ export async function checkCouponNumberAction(
 
     if (dbWinner) {
       isWinner = true;
-      const category = dbWinner.draw?.category || (dbWinner.rank ? `${dbWinner.rank} Rank Prize` : "Daily Prize");
-      const isBumper = category.toLowerCase().includes("bumper");
+      const categoryStr = `${dbWinner.draw?.category || ""} ${dbWinner.rank || ""}`;
+      const isBumper = categoryStr.toLowerCase().includes("bumper");
+      const category = isBumper ? "Bumper Prize (बम्पर पुरस्कार)" : "Daily Prize";
       const prizeAmount = isBumper ? 1000000 : 133334;
 
       winnerRecord = {
@@ -81,15 +82,15 @@ export async function checkCouponNumberAction(
         couponNumber: dbWinner.couponNumber,
         drawDateBS: dbWinner.draw?.publishedAt
           ? dbWinner.draw.publishedAt.toISOString().split("T")[0]
-          : "2081-04-15",
+          : "2083-04-22",
         drawDateAD: dbWinner.draw?.publishedAt || new Date(),
         drawTitle: dbWinner.draw?.titleEn || "IRD Taxpayer Incentive Draw",
         prizeCategory: category,
         prizeAmount,
         claimDeadlineBS: dbWinner.draw?.claimDeadline
           ? dbWinner.draw.claimDeadline.toISOString().split("T")[0]
-          : "2081-05-20",
-        claimDeadlineAD: dbWinner.draw?.claimDeadline || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          : "2083-05-07",
+        claimDeadlineAD: dbWinner.draw?.claimDeadline || new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
         createdAt: dbWinner.createdAt,
       };
     }
@@ -120,22 +121,23 @@ export async function checkCouponNumberAction(
 }
 
 /**
- * Fetch 15 latest official IRD winners for homepage section
+ * Fetch latest official IRD winners including Bumper Prize winners prioritized at top
  */
 export async function getLatestWinnersAction(): Promise<WinnerRecord[]> {
   try {
     const winners = await withPrismaRetry(() =>
       prisma.winner.findMany({
-        take: 15,
+        take: 30,
         orderBy: { createdAt: "desc" },
         include: { draw: true },
       })
     ).catch(() => []);
 
     if (winners && winners.length > 0) {
-      return winners.map((w) => {
-        const category = w.draw?.category || (w.rank ? `${w.rank} Rank Prize` : "Daily Prize");
-        const isBumper = category.toLowerCase().includes("bumper");
+      const mapped = winners.map((w) => {
+        const categoryStr = `${w.draw?.category || ""} ${w.rank || ""}`;
+        const isBumper = categoryStr.toLowerCase().includes("bumper");
+        const category = isBumper ? "Bumper Prize (बम्पर पुरस्कार)" : "Daily Prize";
         const prizeAmount = isBumper ? 1000000 : 133334;
 
         return {
@@ -143,20 +145,26 @@ export async function getLatestWinnersAction(): Promise<WinnerRecord[]> {
           couponNumber: w.couponNumber,
           drawDateBS: w.draw?.publishedAt
             ? w.draw.publishedAt.toISOString().split("T")[0]
-            : "2081-04-15",
+            : "2083-04-22",
           drawDateAD: w.draw?.publishedAt || new Date(),
           drawTitle: w.draw?.titleEn || "IRD Taxpayer Incentive Draw",
           prizeCategory: category,
           prizeAmount,
           claimDeadlineBS: w.draw?.claimDeadline
             ? w.draw.claimDeadline.toISOString().split("T")[0]
-            : "2081-05-20",
-          claimDeadlineAD: w.draw?.claimDeadline || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            : "2083-05-07",
+          claimDeadlineAD: w.draw?.claimDeadline || new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+          isBumper,
         };
       });
+
+      // Sort bumper prize winners to the top
+      mapped.sort((a, b) => (b.isBumper ? 1 : 0) - (a.isBumper ? 1 : 0));
+
+      return mapped.slice(0, 15);
     }
   } catch (err) {
-    console.warn("Database lookup for 15 winners warning:", err);
+    console.warn("Database lookup for latest winners warning:", err);
   }
 
   return [];
